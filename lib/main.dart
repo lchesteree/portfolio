@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'widget/navigation/navigation_bar.dart';
+import 'navigation_bar.dart';
+import 'content/allContent.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,11 +30,11 @@ class Index extends StatelessWidget {
     bool isDesktopView = MediaQuery.of(context).size.width > 800;
 
     Map<String, Function> navigationButtonMap = {
-      'EDUCATION': () {},
-      'SKILLS': () {},
-      'EXPERINCE': () {},
-      'PROJECT': () {},
-      'CONTACT': () {},
+      'EDUCATION': () => scrollToWidgetWhichKeyIs(Education.globalKey),
+      'SKILLS': () => scrollToWidgetWhichKeyIs(Skill.globalKey),
+      'EXPERINCE': () => scrollToWidgetWhichKeyIs(Experience.globalKey),
+      'PROJECT': () => scrollToWidgetWhichKeyIs(Project.globalKey),
+      'CONTACT': () => scrollToWidgetWhichKeyIs(Contact.globalKey),
     };
 
     return Scaffold(
@@ -48,27 +48,12 @@ class Index extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: NavigationBar.height),
-                  Container(
-                    width: double.infinity,
-                    height: 300,
-                    color: Colors.teal.withOpacity(0.5),
-                    child: TextButton(
-                      onPressed: () {
-                        print('vvv');
-                      },
-                      child: Text('AAA'),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 300,
-                    color: Colors.brown,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 300,
-                    color: Colors.red,
-                  ),
+                  AboutMe(isDesktopView),
+                  Education(),
+                  Skill(),
+                  Experience(),
+                  Project(),
+                  Contact(),
                 ],
               ),
             ),
@@ -77,6 +62,14 @@ class Index extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void scrollToWidgetWhichKeyIs(var globalKey) {
+    Scrollable.ensureVisible(
+      globalKey.currentContext,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOutQuint,
     );
   }
 }

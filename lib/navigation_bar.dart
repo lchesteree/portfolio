@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'widget/navigation_button.dart';
-import 'widget/navigation_drop_down_list_item.dart';
-import 'widget/navbar_brand.dart';
+import 'widget/navbar/navigation_button.dart';
+import 'widget/navbar/navigation_drop_down_list_item.dart';
+import 'widget/navbar/navbar_brand.dart';
 
 class NavigationBar extends StatefulWidget {
   static const double height = 80;
@@ -24,13 +24,7 @@ class _NavigationBarState extends State<NavigationBar>
   bool isOpenDropDownList = false;
   bool isForceClose = false;
 
-  final List<NavigationButton> buttonList = [
-    NavigationButton('EDUCATION', () {}),
-    NavigationButton('SKILLS', () {}),
-    NavigationButton('EXPERINCE', () {}),
-    NavigationButton('PROJECT', () {}),
-    NavigationButton('CONTACT', () {}),
-  ];
+  final List<NavigationButton> buttonList = [];
 
   @override
   void initState() {
@@ -46,6 +40,10 @@ class _NavigationBarState extends State<NavigationBar>
         // if force close, no need to set state, because I don't need the animation to avoid Build scheduled during frame.
         if (!isForceClose) setState(() {});
       });
+
+    widget.navigationButtonMap.forEach((key, value) {
+      buttonList.add(NavigationButton(key, value));
+    });
     super.initState();
   }
 
@@ -63,63 +61,67 @@ class _NavigationBarState extends State<NavigationBar>
     );
 
     return Container(
-      height: NavigationDropDownListItem.height * 4 + NavigationBar.height,
-      child: Stack(
-        children: [
-          // Drop down list
-          Positioned(
-            left: 0,
-            right: 0,
-            top: _animation.value,
-            child: NotificationListener(
-              onNotification: (notification) {
-                // if the size of device is changed, close the drop down list immediately
-                if (isOpenDropDownList) {
-                  isOpenDropDownList = false;
-                  isForceClose = true;
-                  _controller.reset();
-                  isForceClose = false;
-                }
-                return false;
-              },
-              child: SizeChangedLayoutNotifier(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+        height: NavigationDropDownListItem.height * 4 + NavigationBar.height,
+        child: Stack(
+          children: [
+            // Drop down list
+            Positioned(
+              left: 0,
+              right: 0,
+              top: _animation.value,
+              child: NotificationListener(
+                onNotification: (notification) {
+                  // if the size of device is changed, close the drop down list immediately
+                  if (isOpenDropDownList) {
+                    isOpenDropDownList = false;
+                    isForceClose = true;
+                    _controller.reset();
+                    isForceClose = false;
+                  }
+                  return false;
+                },
+                child: SizeChangedLayoutNotifier(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      NavigationDropDownListItem('AAAA'),
+                      NavigationDropDownListItem('BBBB'),
+                      NavigationDropDownListItem('AAAA'),
+                      NavigationDropDownListItem('BBBB'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Navigation Bar
+            Material(
+              elevation: isOpenDropDownList ? 0 : 5,
+              child: Container(
+                height: NavigationBar.height,
+                color: Colors.white,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: widget.isDesktopView
+                      ? MainAxisAlignment.spaceAround
+                      : MainAxisAlignment.spaceBetween,
                   children: [
-                    NavigationDropDownListItem('AAAA'),
-                    NavigationDropDownListItem('BBBB'),
-                    NavigationDropDownListItem('AAAA'),
-                    NavigationDropDownListItem('BBBB'),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: NavBarBrand(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 30),
+                      child: widget.isDesktopView
+                          ? navigationBar
+                          : buildDropDownButton(),
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-          // Navigation Bar
-          Container(
-            height: NavigationBar.height,
-            color: Colors.white,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: widget.isDesktopView
-                  ? MainAxisAlignment.spaceAround
-                  : MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: NavBarBrand(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 30),
-                  child: widget.isDesktopView
-                      ? navigationBar
-                      : buildDropDownButton(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
     );
   }
 
