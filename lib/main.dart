@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Chester Lee',
       theme: ThemeData(
+        fontFamily: 'Montserrat',
         primarySwatch: Colors.blue,
         textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.black38),
