@@ -7,7 +7,6 @@ class Education extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black12,
       key: globalKey,
       child: Column(
         children: [
