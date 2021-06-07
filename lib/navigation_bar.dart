@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'navigation_button.dart';
-import 'navigation_drop_down_list_item.dart';
-import '../navbar_brand.dart';
+import 'widget/navigation_button.dart';
+import 'widget/navigation_drop_down_list_item.dart';
+import 'widget/navbar_brand.dart';
 
 class NavigationBar extends StatefulWidget {
   static const double height = 80;
